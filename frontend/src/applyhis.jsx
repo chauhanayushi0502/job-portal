@@ -83,7 +83,7 @@ function ApplyHistory() {
                       {/* <p>Max: {item.jobId.salary.max}</p> */}
                     </div>
                   ) : (
-                    "No Salary"
+                    "No Salary!"
                   )}
                 </td>
 
