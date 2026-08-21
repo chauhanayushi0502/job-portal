@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import { Schema } from 'mongoose';
 const interviewSchema =Schema({
   applicationId: {
     type: mongoose.Schema.Types.ObjectId,

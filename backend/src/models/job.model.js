@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import { Schema } from 'mongoose';
 const jobSchema =Schema({
   companyID: {
     type: mongoose.Schema.Types.ObjectId,

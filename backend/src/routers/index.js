@@ -4,6 +4,7 @@ import companyRouter from "./company.router.js";
 import candidateRouter from "./candidate.router.js";
 import jobRouter from "./job.router.js";
 import applicationRouter from "./application.router.js";
+// import notifyRouter from "./notification.routers.js"
 
 const appRouter = Router();
 
@@ -12,5 +13,6 @@ appRouter.use("/company", companyRouter);
 appRouter.use("/candidate", candidateRouter);
 appRouter.use("/job", jobRouter);
 appRouter.use("/application", applicationRouter);
+// appRouter.use("/notifyRouter",notifyRouter);
 
 export default appRouter;

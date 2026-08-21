@@ -7,7 +7,9 @@ import {
   getJobApplicationsForCompany,
   updateApplicationStatus,
   inviteCandidate,
-  getCompanyNotifications
+  getCompanyNotifications,
+  markAsRead,
+  markAllAsRead
 } from "../controllers/company.controller.js";
 import { authentication } from "../middleware/authentication.js";
 import { addjob, updatejob, deletejob } from "../controllers/job.controllers.js";
@@ -25,5 +27,6 @@ companyRouter.get("/applications/:jobId", authentication, getJobApplicationsForC
 companyRouter.put("/application/:appId", authentication, updateApplicationStatus);
 companyRouter.post("/invite", authentication, inviteCandidate);
 companyRouter.get("/notifications", authentication, getCompanyNotifications);
-
+companyRouter.put("/markread/:notificationId",authentication,markAsRead)
+companyRouter.put("/markallread",authentication, markAllAsRead);
 export default companyRouter;

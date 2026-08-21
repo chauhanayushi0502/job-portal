@@ -22,7 +22,7 @@ function Notifications({ onClose }) {
 
   const markAsRead = async (id) => {
     const token = localStorage.getItem('token');
-    await fetch(`http://localhost:8000/api/notification/markread/${id}`, {
+    await fetch(`http://localhost:8000/api/company/markread/${id}`, {
       method: 'PUT',
       headers: { 'token': token }
     });
@@ -33,8 +33,8 @@ function Notifications({ onClose }) {
     <div style={styles.modalOverlay}>
       <div style={styles.modal}>
         <div style={styles.modalHeader}>
-          <h2>🔔 Notifications</h2>
-          <button onClick={onClose} style={styles.closeBtn}>✕</button>
+          <h2>Notifications</h2>
+          <button onClick={onClose} style={styles.closeBtn}>close</button>
         </div>
 
         {loading ? (

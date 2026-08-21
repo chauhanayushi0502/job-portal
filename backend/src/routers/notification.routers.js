@@ -1,17 +1,17 @@
 import { Router } from "express";
-import { 
-  getNotifications, 
-  markAsRead, 
-  markAllAsRead 
+import {
+  getNotifications,
+  markAsRead,
+  markAllAsRead,
 } from "../controllers/notification.controller.js";
 import { authentication } from "../middleware/authentication.js";
 
-const notificationRouter = Router();
+const notifyRouter = Router();
 
-notificationRouter.use(authentication);
+notifyRouter.use(authentication);
 
-notificationRouter.get("/getnotifications", getNotifications);
-notificationRouter.put("/markread/:notificationId", markAsRead);
-notificationRouter.put("/markallread", markAllAsRead);
+notifyRouter.get("/getnotifications", getNotifications);
+notifyRouter.put("/markread/:notificationId", markAsRead);
+notifyRouter.put("/markallread", markAllAsRead);
 
-export default notificationRouter;
+export default notifyRouter;

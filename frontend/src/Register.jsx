@@ -1,32 +1,242 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+
+// function Register() {
+//   const [formData, setFormData] = useState({
+//     username: '',
+//     email: '',
+//     password: '',
+//     role: 'candidate'
+//   });
+//   const [message, setMessage] = useState('');
+//   const [loading, setLoading] = useState(false);
+
+//   const handleChange = (e) => {
+//     setFormData({
+//       ...formData,
+//       [e.target.name]: e.target.value
+//     });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     setMessage('');
+
+//     try {
+//       const response = await fetch('http://localhost:8000/api/user/register', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(formData),
+//       });
+
+//       const data = await response.json();
+
+//       if (response.ok) {
+//         setMessage('Registration successful! Please login.');
+//         setFormData({
+//           username: '',
+//           email: '',
+//           password: '',
+//           role: 'candidate'
+//         });
+//       } else {
+//         setMessage((data.message || 'Registration failed'));
+//       }
+//     } catch (error) {
+//       setMessage('Network error. Make sure server is running on port 8000');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div style={styles.container}>
+//       <div style={styles.formContainer}>
+//         <h2 style={styles.title}>Register</h2>
+        
+//         {message && (
+//           <div style={message.includes? styles.success : styles.error}>
+//             {message}
+//           </div>
+//         )}
+
+//         <form onSubmit={handleSubmit}>
+//           <div style={styles.inputGroup}>
+//             <label>Username:</label>
+//             <input
+//               type="text"
+//               name="username"
+//               value={formData.username}
+//               onChange={handleChange}
+//               required
+//               style={styles.input}
+//             />
+//           </div>
+
+//           <div style={styles.inputGroup}>
+//             <label>Email:</label>
+//             <input
+//               type="email"
+//               name="email"
+//               value={formData.email}
+//               onChange={handleChange}
+//               required
+//               style={styles.input}
+//             />
+//           </div>
+
+//           <div style={styles.inputGroup}>
+//             <label>Password:</label>
+//             <input
+//               type="password"
+//               name="password"
+//               value={formData.password}
+//               onChange={handleChange}
+//               required
+//               style={styles.input}
+//             />
+//           </div>
+
+//           <div style={styles.inputGroup}>
+//             <label>Role:</label>
+//             <select
+//               name="role"
+//               value={formData.role}
+//               onChange={handleChange}
+//               style={styles.input}
+//             >
+//               <option value="candidate">Candidate</option>
+//               <option value="company">Company</option>
+//             </select>
+//           </div>
+
+//           <button
+//             type="submit"
+//             disabled={loading}
+//             style={loading ? styles.buttonDisabled : styles.button}
+//           >
+//             {loading ? 'Registering...' : 'Register'}
+//           </button>
+//         </form>
+
+//         <p style={styles.link}>
+//           Already have an account? <a href="/login">Login</a>
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
+
+// const styles = {
+//   container: {
+//     display: 'flex',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     minHeight: '100vh',
+//     backgroundColor: '#f5f5f5',
+//     fontFamily: 'Arial, sans-serif'
+//   },
+//   formContainer: {
+//     backgroundColor: 'white',
+//     padding: '40px',
+//     borderRadius: '10px',
+//     boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+//     width: '100%',
+//     maxWidth: '400px'
+//   },
+//   title: {
+//     textAlign: 'center',
+//     color: '#333',
+//     marginBottom: '20px'
+//   },
+//   inputGroup: {
+//     marginBottom: '15px'
+//   },
+//   input: {
+//     width: '100%',
+//     padding: '10px',
+//     marginTop: '5px',
+//     borderRadius: '5px',
+//     border: '1px solid #ddd',
+//     fontSize: '16px'
+//   },
+//   button: {
+//     width: '100%',
+//     padding: '12px',
+//     backgroundColor: '#007bff',
+//     color: 'white',
+//     border: 'none',
+//     borderRadius: '5px',
+//     fontSize: '16px',
+//     cursor: 'pointer'
+//   },
+//   buttonDisabled: {
+//     width: '100%',
+//     padding: '12px',
+//     backgroundColor: '#6c757d',
+//     color: 'white',
+//     border: 'none',
+//     borderRadius: '5px',
+//     fontSize: '16px',
+//     cursor: 'not-allowed'
+//   },
+//   success: {
+//     padding: '10px',
+//     backgroundColor: '#d4edda',
+//     color: '#155724',
+//     borderRadius: '5px',
+//     marginBottom: '15px',
+//     textAlign: 'center'
+//   },
+//   error: {
+//     padding: '10px',
+//     backgroundColor: '#f8d7da',
+//     color: '#721c24',
+//     borderRadius: '5px',
+//     marginBottom: '15px',
+//     textAlign: 'center'
+//   },
+//   link: {
+//     textAlign: 'center',
+//     marginTop: '20px',
+//     color: '#666'
+//   }
+// };
+
+// export default Register;
+
+
+import React, { useState } from "react";
 
 function Register() {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    role: 'candidate'
+    username: "",
+    email: "",
+    password: "",
+    role: "candidate",
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage('');
+    setMessage("");
 
     try {
-      const response = await fetch('http://localhost:8000/api/user/register', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/api/user/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -34,18 +244,18 @@ function Register() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Registration successful! Please login.');
+        setMessage("✅ Registration successful! Please login.");
         setFormData({
-          username: '',
-          email: '',
-          password: '',
-          role: 'candidate'
+          username: "",
+          email: "",
+          password: "",
+          role: "candidate",
         });
       } else {
-        setMessage((data.message || 'Registration failed'));
+        setMessage("❌ " + (data.message || "Registration failed"));
       }
     } catch (error) {
-      setMessage('Network error. Make sure server is running on port 8000');
+      setMessage("❌ Network error. Make sure server is running on port 8000");
     } finally {
       setLoading(false);
     }
@@ -55,9 +265,9 @@ function Register() {
     <div style={styles.container}>
       <div style={styles.formContainer}>
         <h2 style={styles.title}>Register</h2>
-        
+
         {message && (
-          <div style={message.includes? styles.success : styles.error}>
+          <div style={message.includes("✅") ? styles.success : styles.error}>
             {message}
           </div>
         )}
@@ -117,7 +327,7 @@ function Register() {
             disabled={loading}
             style={loading ? styles.buttonDisabled : styles.button}
           >
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
@@ -131,78 +341,78 @@ function Register() {
 
 const styles = {
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'Arial, sans-serif'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#f5f5f5",
+    fontFamily: "Arial, sans-serif",
   },
   formContainer: {
-    backgroundColor: 'white',
-    padding: '40px',
-    borderRadius: '10px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    width: '100%',
-    maxWidth: '400px'
+    backgroundColor: "white",
+    padding: "40px",
+    borderRadius: "10px",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+    width: "100%",
+    maxWidth: "400px",
   },
   title: {
-    textAlign: 'center',
-    color: '#333',
-    marginBottom: '20px'
+    textAlign: "center",
+    color: "#333",
+    marginBottom: "20px",
   },
   inputGroup: {
-    marginBottom: '15px'
+    marginBottom: "15px",
   },
   input: {
-    width: '100%',
-    padding: '10px',
-    marginTop: '5px',
-    borderRadius: '5px',
-    border: '1px solid #ddd',
-    fontSize: '16px'
+    width: "100%",
+    padding: "10px",
+    marginTop: "5px",
+    borderRadius: "5px",
+    border: "1px solid #ddd",
+    fontSize: "16px",
   },
   button: {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    fontSize: '16px',
-    cursor: 'pointer'
+    width: "100%",
+    padding: "12px",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
+    cursor: "pointer",
   },
   buttonDisabled: {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: '#6c757d',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    fontSize: '16px',
-    cursor: 'not-allowed'
+    width: "100%",
+    padding: "12px",
+    backgroundColor: "#6c757d",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
+    cursor: "not-allowed",
   },
   success: {
-    padding: '10px',
-    backgroundColor: '#d4edda',
-    color: '#155724',
-    borderRadius: '5px',
-    marginBottom: '15px',
-    textAlign: 'center'
+    padding: "10px",
+    backgroundColor: "#d4edda",
+    color: "#155724",
+    borderRadius: "5px",
+    marginBottom: "15px",
+    textAlign: "center",
   },
   error: {
-    padding: '10px',
-    backgroundColor: '#f8d7da',
-    color: '#721c24',
-    borderRadius: '5px',
-    marginBottom: '15px',
-    textAlign: 'center'
+    padding: "10px",
+    backgroundColor: "#f8d7da",
+    color: "#721c24",
+    borderRadius: "5px",
+    marginBottom: "15px",
+    textAlign: "center",
   },
   link: {
-    textAlign: 'center',
-    marginTop: '20px',
-    color: '#666'
-  }
+    textAlign: "center",
+    marginTop: "20px",
+    color: "#666",
+  },
 };
 
 export default Register;

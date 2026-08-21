@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import { Schema } from 'mongoose';
 const candidateSchema =Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
