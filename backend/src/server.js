@@ -2,17 +2,22 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import appRouter from "./routers/index.js";
+import dotenv from "dotenv"
 
-const port = 8000;
+
+const port = process.env.PORT || 8000;
 const app = express();
+
+dotenv.config();
+
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: process.env.ORIGINS,
   credentials: true
 }));
 
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/jobs')
+mongoose.connect(process.env.DB_URL)
   .then(() => console.log("DB connected"))
   .catch(err => console.log("DB error:", err.message));
 

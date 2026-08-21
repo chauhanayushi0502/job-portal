@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { Company } from "../models/company.model.js";
 import { Candidates } from "../models/Candidate.model.js";
 
-export const jwtsec = "abxy";
+export const jwtsec = process.env.JWT_SECRET_KEY;
 
 export const adduser = async (req, res) => {
   try {
@@ -129,7 +129,7 @@ export const login = async (req, res) => {
       jwtsec,
       {
         expiresIn: "10d",
-      }
+      },
     );
 
     res.status(200).json({
