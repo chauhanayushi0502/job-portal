@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getFetchUrl } from "./util";
-
+import Login from "./Login";
 function Register() {
   const [formData, setFormData] = useState({
     username: "",
