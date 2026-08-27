@@ -6,7 +6,7 @@ import JobApplications from "./JobApplications";
 import Navbar from "./Navbar";
 import AuthRoutes from "./AuthRoutes";
 import ProtectedRoutes from "./ProtectedRoute";
-import Login from "./login";
+import Login from "./LoginPage";
 
 function App() {
   return (
