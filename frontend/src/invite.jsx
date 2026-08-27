@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getFetchUrl } from "./util";
 
 const InviteForm = () => {
   const [applicationId, setapplicationId] = useState("");
@@ -57,7 +58,7 @@ const InviteForm = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/company/invite",
+        getFetchUrl("api/company/invite"),
         {
           method: "POST",
           headers: {

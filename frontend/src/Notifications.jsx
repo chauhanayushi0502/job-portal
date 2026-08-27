@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getFetchUrl } from './util';
 
 function Notifications({ onClose }) {
   const [notifications, setNotifications] = useState([]);
@@ -10,7 +11,7 @@ function Notifications({ onClose }) {
 
   const fetchNotifications = async () => {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:8000/api/notification/getnotifications', {
+    const response = await fetch(getFetchUrl("api/notification/getnotifications"), {
       headers: { 'token': token }
     });
     const data = await response.json();
@@ -22,7 +23,7 @@ function Notifications({ onClose }) {
 
   const markAsRead = async (id) => {
     const token = localStorage.getItem('token');
-    await fetch(`http://localhost:8000/api/company/markread/${id}`, {
+    await fetch(getFetchUrl(`api/company/markread/${id}`), {
       method: 'PUT',
       headers: { 'token': token }
     });

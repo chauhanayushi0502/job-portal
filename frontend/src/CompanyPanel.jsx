@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getFetchUrl } from "./util";
 
 function CompanyPanel() {
   const [company, setCompany] = useState(null);
@@ -52,15 +53,12 @@ function CompanyPanel() {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:8000/api/company/getcompany",
-        {
-          method: "GET",
-          headers: {
-            token: token,
-          },
-        }
-      );
+      const response = await fetch(getFetchUrl("api/company/getcompany"), {
+        method: "GET",
+        headers: {
+          token: token,
+        },
+      });
 
       const data = await response.json();
 
@@ -92,8 +90,7 @@ function CompanyPanel() {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:8000/api/company/updatecompany",
+      const response = await fetch(getFetchUrl("api/company/updatecompany"),
         {
           method: "PUT",
           headers: {
@@ -101,7 +98,7 @@ function CompanyPanel() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(profileForm),
-        }
+        },
       );
 
       const data = await response.json();
@@ -140,15 +137,12 @@ function CompanyPanel() {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:8000/api/company/myjobs",
-        {
-          method: "GET",
-          headers: {
-            token: token,
-          },
-        }
-      );
+      const response = await fetch(getFetchUrl("api/company/myjobs"), {
+        method: "GET",
+        headers: {
+          token: token,
+        },
+      });
 
       const data = await response.json();
 
@@ -175,17 +169,14 @@ function CompanyPanel() {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:8000/api/company/addjob",
-        {
-          method: "POST",
-          headers: {
-            token: token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(jobForm),
-        }
-      );
+      const response = await fetch(getFetchUrl("api/company/addjob"), {
+        method: "POST",
+        headers: {
+          token: token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobForm),
+      });
 
       const data = await response.json();
 
@@ -224,8 +215,7 @@ function CompanyPanel() {
         return;
       }
 
-      const response = await fetch(
-        `http://localhost:8000/api/company/updatejob/${editingJob._id}`,
+      const response = await fetch(getFetchUrl(`api/company/updatejob/${editingJob._id}`),
         {
           method: "PUT",
           headers: {
@@ -233,7 +223,7 @@ function CompanyPanel() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(jobForm),
-        }
+        },
       );
 
       const data = await response.json();
@@ -260,7 +250,7 @@ function CompanyPanel() {
 
   const deleteJob = async (jobId) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this job? This will also remove all applications."
+      "Are you sure you want to delete this job? This will also remove all applications.",
     );
 
     if (!confirmDelete) {
@@ -276,14 +266,13 @@ function CompanyPanel() {
         return;
       }
 
-      const response = await fetch(
-        `http://localhost:8000/api/company/deletejob/${jobId}`,
+      const response = await fetch(getFetchUrl(`api/company/deletejob/${jobId}`),
         {
           method: "DELETE",
           headers: {
             token: token,
           },
-        }
+        },
       );
 
       const data = await response.json();
@@ -338,9 +327,7 @@ function CompanyPanel() {
         max: job.salary?.max ?? "",
       },
       vacancies: job.vacancies || 1,
-      deadline: job.deadline
-        ? job.deadline.split("T")[0]
-        : "",
+      deadline: job.deadline ? job.deadline.split("T")[0] : "",
     });
 
     setShowJobModal(true);
@@ -413,17 +400,11 @@ function CompanyPanel() {
         <h1 style={styles.heading}>Company Panel</h1>
 
         <div style={styles.headerButtons}>
-          <button
-            onClick={handleProfileUpdate}
-            style={styles.profileButton}
-          >
+          <button onClick={handleProfileUpdate} style={styles.profileButton}>
             Show Profile
           </button>
 
-          <button
-            onClick={openAddJobModal}
-            style={styles.addButton}
-          >
+          <button onClick={openAddJobModal} style={styles.addButton}>
             + Add Job
           </button>
         </div>
@@ -432,9 +413,7 @@ function CompanyPanel() {
       {message && (
         <div
           style={
-            messageType === "success"
-              ? styles.successMsg
-              : styles.errorMsg
+            messageType === "success" ? styles.successMsg : styles.errorMsg
           }
         >
           {message}
@@ -446,22 +425,16 @@ function CompanyPanel() {
           <h3>{company.companyName || "Company"}</h3>
 
           <p>
-            <strong>Location:</strong>{" "}
-            {company.location || "N/A"}
+            <strong>Location:</strong> {company.location || "N/A"}
           </p>
 
           <p>
-            <strong>Email:</strong>{" "}
-            {company.email || "N/A"}
+            <strong>Email:</strong> {company.email || "N/A"}
           </p>
         </div>
       )}
 
-      {loading && (
-        <div style={styles.loading}>
-          Loading...
-        </div>
-      )}
+      {loading && <div style={styles.loading}>Loading...</div>}
 
       <div style={styles.jobsContainer}>
         <h3>Your Jobs</h3>
@@ -472,27 +445,20 @@ function CompanyPanel() {
           </p>
         ) : (
           jobs.map((job) => (
-            <div
-              key={job._id}
-              style={styles.jobCard}
-            >
+            <div key={job._id} style={styles.jobCard}>
               <div style={styles.jobInfo}>
                 <h4>{job.title}</h4>
 
                 <p style={styles.jobMeta}>
-                  {job.location || "N/A"} •{" "}
-                  {job.status || "Active"} •{" "}
+                  {job.location || "N/A"} • {job.status || "Active"} •{" "}
                   {job.vacancies || 0} position(s)
                 </p>
 
-                <p style={styles.category}>
-                  Category: {job.category || "N/A"}
-                </p>
+                <p style={styles.category}>Category: {job.category || "N/A"}</p>
 
                 {job.salary && (
                   <p style={styles.salary}>
-                    Salary: {job.salary.min || 0} -{" "}
-                    {job.salary.max || 0}
+                    Salary: {job.salary.min || 0} - {job.salary.max || 0}
                   </p>
                 )}
               </div>
@@ -532,9 +498,7 @@ function CompanyPanel() {
 
               <button
                 type="button"
-                onClick={() =>
-                  setShowEditProfileModal(false)
-                }
+                onClick={() => setShowEditProfileModal(false)}
                 style={styles.closeButton}
               >
                 ×
@@ -607,16 +571,12 @@ function CompanyPanel() {
                   style={styles.submitBtn}
                   disabled={loading}
                 >
-                  {loading
-                    ? "Updating..."
-                    : "Update Profile"}
+                  {loading ? "Updating..." : "Update Profile"}
                 </button>
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowEditProfileModal(false)
-                  }
+                  onClick={() => setShowEditProfileModal(false)}
                   style={styles.cancelBtn}
                 >
                   Cancel
@@ -635,9 +595,7 @@ function CompanyPanel() {
 
               <button
                 type="button"
-                onClick={() =>
-                  setShowProfileModal(false)
-                }
+                onClick={() => setShowProfileModal(false)}
                 style={styles.closeButton}
               >
                 ×
@@ -647,53 +605,39 @@ function CompanyPanel() {
             <div style={styles.profileDetails}>
               <div style={styles.profileRow}>
                 <strong>Company Name</strong>
-                <span>
-                  {company.companyName || "N/A"}
-                </span>
+                <span>{company.companyName || "N/A"}</span>
               </div>
 
               <div style={styles.profileRow}>
                 <strong>Email</strong>
-                <span>
-                  {company.email || "N/A"}
-                </span>
+                <span>{company.email || "N/A"}</span>
               </div>
 
               <div style={styles.profileRow}>
                 <strong>Phone</strong>
-                <span>
-                  {company.phone || "N/A"}
-                </span>
+                <span>{company.phone || "N/A"}</span>
               </div>
 
               <div style={styles.profileRow}>
                 <strong>Location</strong>
-                <span>
-                  {company.location || "N/A"}
-                </span>
+                <span>{company.location || "N/A"}</span>
               </div>
 
               <div style={styles.profileRow}>
                 <strong>Website</strong>
-                <span>
-                  {company.website || "N/A"}
-                </span>
+                <span>{company.website || "N/A"}</span>
               </div>
 
               <div style={styles.profileRow}>
                 <strong>Description</strong>
-                <span>
-                  {company.description || "N/A"}
-                </span>
+                <span>{company.description || "N/A"}</span>
               </div>
             </div>
 
             <div style={styles.modalButtons}>
               <button
                 type="button"
-                onClick={() =>
-                  setShowProfileModal(false)
-                }
+                onClick={() => setShowProfileModal(false)}
                 style={styles.cancelBtn}
               >
                 Close
@@ -715,11 +659,7 @@ function CompanyPanel() {
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
             <div style={styles.modalHeader}>
-              <h2>
-                {editingJob
-                  ? "Edit Job"
-                  : "Add New Job"}
-              </h2>
+              <h2>{editingJob ? "Edit Job" : "Add New Job"}</h2>
 
               <button
                 onClick={closeJobModal}
@@ -820,13 +760,8 @@ function CompanyPanel() {
               />
 
               <div style={styles.modalButtons}>
-                <button
-                  type="submit"
-                  style={styles.submitBtn}
-                >
-                  {editingJob
-                    ? "Update Job"
-                    : "Add Job"}
+                <button type="submit" style={styles.submitBtn}>
+                  {editingJob ? "Update Job" : "Add Job"}
                 </button>
 
                 <button

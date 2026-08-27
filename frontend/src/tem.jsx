@@ -1,6 +1,6 @@
 import React from 'react';
 import Register from './Register';
-import Login from './Login';
+import Login from './login';
 import CompanyPanel from './CompanyPanel';
 import CandidatePanel from './CandidatePanel';
 import JobApplications from './JobApplications';

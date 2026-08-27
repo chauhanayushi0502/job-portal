@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getFetchUrl } from "./util";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -27,15 +28,16 @@ function Navbar() {
     let url = "";
 
     if (parsed.role === "company") {
-      url = "http://localhost:8000/api/company/notifications";
+      url = "api/company/notifications";
     } else if (parsed.role === "candidate") {
-      url = "http://localhost:8000/api/candidate/getCandidateNotifications";
+      url = "api/candidate/getCandidateNotifications";
+
     } else {
       return;
     }
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(getFetchUrl(url), {
         headers: { token: token },
       });
       const data = await response.json();
@@ -52,7 +54,7 @@ function Navbar() {
   async function markAsRead(notificationId) {
     const token = localStorage.getItem("token");
     try {
-      await fetch(`http://localhost:8000/api/notification/markread/${notificationId}`, {
+      await fetch(getFetchUrl(`api/notification/markread/${notificationId}`), {
         method: "PUT",
         headers: { token: token },
       });
@@ -65,7 +67,7 @@ function Navbar() {
   async function markAllAsRead() {
     const token = localStorage.getItem("token");
     try {
-      await fetch("http://localhost:8000/api/notification/markallread", {
+      await fetch(getFetchUrl("api/notification/markallread"), {
         method: "PUT",
         headers: { token: token },
       });
@@ -110,22 +112,6 @@ function Navbar() {
           <span style={styles.roleBadge}>
             {user ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : ""}
           </span>
-
-
-          {/* {user?.role === "candidate" && (
-            <div style={styles.navLinks}>
-              <button onClick={goToAllJobs} style={styles.navLink}>All Jobs</button>
-              <button onClick={goToMyApplications} style={styles.navLink}>My Applications</button>
-            </div>
-          )}
-
-          {user?.role === "company" && (
-            <div style={styles.navLinks}>
-              <button onClick={() => navigate("/company")} style={styles.navLink}>
-                Profile
-              </button>
-            </div>
-          )} */}
         </div>
 
         <div style={styles.navRight}>

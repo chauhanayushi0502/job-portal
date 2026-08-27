@@ -3,8 +3,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Company } from "../models/company.model.js";
 import { Candidates } from "../models/Candidate.model.js";
+import dotenv from "dotenv"
+
+dotenv.config();
 
 export const jwtsec = process.env.JWT_SECRET_KEY;
+
+console.log(jwtsec)
 
 export const adduser = async (req, res) => {
   try {

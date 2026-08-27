@@ -5,13 +5,13 @@ import appRouter from "./routers/index.js";
 import dotenv from "dotenv"
 
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 3000;
 const app = express();
 
 dotenv.config();
 
 app.use(cors({
-  origin: process.env.ORIGINS,
+  origin: process.env.ORIGINS.split(",").map((e) => e),
   credentials: true
 }));
 

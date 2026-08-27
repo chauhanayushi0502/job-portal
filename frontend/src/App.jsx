@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./Login";
+import Login from "./login";
 import Register from "./Register";
 import CompanyPanel from "./CompanyPanel";
 import CandidatePanel from "./CandidatePanel";
@@ -14,7 +14,7 @@ function App() {
       <Routes>
 
         <Route element={<AuthRoutes />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
 
@@ -48,7 +48,7 @@ function App() {
           />
         </Route>
 
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/Login" />} />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
