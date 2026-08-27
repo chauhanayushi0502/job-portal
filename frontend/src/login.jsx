@@ -10,6 +10,7 @@ function Login() {
   });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -103,7 +104,7 @@ function Login() {
         </form>
 
         <p style={styles.link}>
-          Don't have an account? <a href="/Register">Register</a>
+          Don't have an account? <a href="/register">Register</a>
         </p>
       </div>
     </div>
