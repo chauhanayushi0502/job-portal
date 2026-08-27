@@ -15,7 +15,7 @@ function App() {
 
         <Route element={<AuthRoutes />}>
           <Route path="/Login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/Register" element={<Register />} />
         </Route>
 
         <Route element={<ProtectedRoutes />}>

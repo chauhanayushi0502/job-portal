@@ -35,7 +35,7 @@ function Register() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("✅ Registration successful! Please login.");
+        setMessage("Registration successful! Please login.");
         setFormData({
           username: "",
           email: "",
@@ -43,10 +43,10 @@ function Register() {
           role: "candidate",
         });
       } else {
-        setMessage("❌ " + (data.message || "Registration failed"));
+        setMessage( (data.message || "Registration failed"));
       }
     } catch (error) {
-      setMessage("❌ Network error. Make sure server is running on port 8000");
+      setMessage("Network error. Make sure server is running on port 8000");
     } finally {
       setLoading(false);
     }

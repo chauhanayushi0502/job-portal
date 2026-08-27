@@ -1,7 +1,7 @@
 import React,{ useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFetchUrl } from "./util";
-
+import Register from "./Register";
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -104,7 +104,7 @@ function Login() {
         </form>
 
         <p style={styles.link}>
-          Don't have an account? <a href="/register">Register</a>
+          Don't have an account? <a href="/Register">Register</a>
         </p>
       </div>
     </div>
