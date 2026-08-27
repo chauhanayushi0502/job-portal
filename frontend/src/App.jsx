@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./login";
 import Register from "./Register";
 import CompanyPanel from "./CompanyPanel";
 import CandidatePanel from "./CandidatePanel";
@@ -7,6 +6,7 @@ import JobApplications from "./JobApplications";
 import Navbar from "./Navbar";
 import AuthRoutes from "./AuthRoutes";
 import ProtectedRoutes from "./ProtectedRoute";
+import Login from "./login";
 
 function App() {
   return (
