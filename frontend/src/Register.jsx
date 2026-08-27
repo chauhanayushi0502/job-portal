@@ -24,7 +24,7 @@ function Register() {
     setMessage("");
 
     try {
-      const response = await fetch(getFetchUrl("api/user/register"), {
+      const response = await fetch(getFetchUrl("api/user/Register"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
