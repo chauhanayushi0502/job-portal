@@ -27,6 +27,6 @@ companyRouter.get("/applications/:jobId", authentication, getJobApplicationsForC
 companyRouter.put("/application/:appId", authentication, updateApplicationStatus);
 companyRouter.post("/invite", authentication, inviteCandidate);
 companyRouter.get("/notifications", authentication, getCompanyNotifications);
-companyRouter.put("/markread/:notificationId",authentication,markAsRead)
-companyRouter.put("/markallread",authentication, markAllAsRead);
+companyRouter.put("/markAsRead/:notificationId",authentication,markAsRead)
+companyRouter.put("/markAllAsRead",authentication, markAllAsRead);
 export default companyRouter;

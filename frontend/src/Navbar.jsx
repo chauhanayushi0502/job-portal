@@ -4,6 +4,7 @@ import { getFetchUrl } from "./util";
 
 function Navbar() {
   const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -11,39 +12,65 @@ function Navbar() {
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
+
     if (userData) {
-      setUser(JSON.parse(userData));
+      try {
+        const parsed = JSON.parse(userData);
+        setUser(parsed);
+      } catch (error) {
+        console.error("Invalid user data:", error);
+      }
     }
+
     fetchNotifications();
   }, []);
 
   async function fetchNotifications() {
     const token = localStorage.getItem("token");
+
     if (!token) return;
 
     const userData = localStorage.getItem("user");
+
     if (!userData) return;
 
-    const parsed = JSON.parse(userData);
+    let parsed;
+
+    try {
+      parsed = JSON.parse(userData);
+    } catch (error) {
+      console.error("Invalid user data:", error);
+      return;
+    }
+
     let url = "";
 
     if (parsed.role === "company") {
       url = "api/company/notifications";
     } else if (parsed.role === "candidate") {
       url = "api/candidate/getCandidateNotifications";
-
     } else {
       return;
     }
 
     try {
       const response = await fetch(getFetchUrl(url), {
-        headers: { token: token },
+        headers: {
+          token: token,
+        },
       });
+
       const data = await response.json();
+
       if (data.success) {
-        setNotifications(data.notifications || []);
-        const unread = data.notifications.filter((n) => n.isRead === false).length;
+        const notificationList = data.notifications || [];
+
+        setNotifications(notificationList);
+
+        const unread = notificationList.filter(
+          (notification) => notification.isRead === false
+        ).length;
+
         setUnreadCount(unread);
       }
     } catch (error) {
@@ -53,12 +80,58 @@ function Navbar() {
 
   async function markAsRead(notificationId) {
     const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    const userData = localStorage.getItem("user");
+
+    if (!userData) return;
+
+    let parsed;
+
     try {
-      await fetch(getFetchUrl(`api/notification/markread/${notificationId}`), {
-        method: "PUT",
-        headers: { token: token },
-      });
-      fetchNotifications();
+      parsed = JSON.parse(userData);
+    } catch (error) {
+      console.error("Invalid user data:", error);
+      return;
+    }
+
+    let url = "";
+
+    if (parsed.role === "company") {
+      url = "api/company/markAsRead";
+    } else if (parsed.role === "candidate") {
+      url = "api/candidate/markAsRead";
+    } else {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        getFetchUrl(`${url}/${notificationId}`),
+        {
+          method: "PUT",
+          headers: {
+            token: token,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notification) =>
+            notification._id === notificationId
+              ? { ...notification, isRead: true }
+              : notification
+          )
+        );
+
+        setUnreadCount((prevCount) => Math.max(0, prevCount - 1));
+      } else {
+        console.error("Error marking notification as read:", data.message);
+      }
     } catch (error) {
       console.error("Error marking as read:", error);
     }
@@ -66,12 +139,54 @@ function Navbar() {
 
   async function markAllAsRead() {
     const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    const userData = localStorage.getItem("user");
+
+    if (!userData) return;
+
+    let parsed;
+
     try {
-      await fetch(getFetchUrl("api/notification/markallread"), {
+      parsed = JSON.parse(userData);
+    } catch (error) {
+      console.error("Invalid user data:", error);
+      return;
+    }
+
+    let url = "";
+
+    if (parsed.role === "company") {
+      url = "api/company/markAllAsRead";
+    } else if (parsed.role === "candidate") {
+      url = "api/candidate/markAllAsRead";
+    } else {
+      return;
+    }
+
+    try {
+      const response = await fetch(getFetchUrl(url), {
         method: "PUT",
-        headers: { token: token },
+        headers: {
+          token: token,
+        },
       });
-      fetchNotifications();
+
+      const data = await response.json();
+
+      if (data.success) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notification) => ({
+            ...notification,
+            isRead: true,
+          }))
+        );
+
+        setUnreadCount(0);
+      } else {
+        console.error("Error marking all as read:", data.message);
+      }
     } catch (error) {
       console.error("Error marking all as read:", error);
     }
@@ -85,21 +200,12 @@ function Navbar() {
 
   function getHomeLink() {
     if (!user) return "/";
+
     if (user.role === "company") return "/company";
+
     if (user.role === "candidate") return "/candidate";
+
     return "/";
-  }
-
-  function goToAllJobs() {
-    if (user?.role === "candidate") {
-      navigate("/candidate", { replace: true });
-    }
-  }
-
-  function goToMyApplications() {
-    if (user?.role === "candidate") {
-      navigate("/candidate?view=myapps", { replace: true });
-    }
   }
 
   return (
@@ -109,8 +215,11 @@ function Navbar() {
           <a href={getHomeLink()} style={styles.brand}>
             Job Portal
           </a>
+
           <span style={styles.roleBadge}>
-            {user ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : ""}
+            {user
+              ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+              : ""}
           </span>
         </div>
 
@@ -120,8 +229,11 @@ function Navbar() {
             style={styles.notificationBtn}
           >
             🔔
+
             {unreadCount > 0 && (
-              <span style={styles.badge}>{unreadCount}</span>
+              <span style={styles.badge}>
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
             )}
           </button>
 
@@ -130,23 +242,42 @@ function Navbar() {
           </button>
         </div>
       </nav>
+
       {showNotifications && (
-        <div style={styles.notificationOverlay} onClick={() => setShowNotifications(false)}>
-          <div style={styles.notificationPanel} onClick={(e) => e.stopPropagation()}>
+        <div
+          style={styles.notificationOverlay}
+          onClick={() => setShowNotifications(false)}
+        >
+          <div
+            style={styles.notificationPanel}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div style={styles.notificationHeader}>
               <h3>Notifications</h3>
+
               <div style={styles.notificationActions}>
                 {unreadCount > 0 && (
-                  <button onClick={markAllAsRead} style={styles.markAllBtn}>
+                  <button
+                    onClick={markAllAsRead}
+                    style={styles.markAllBtn}
+                  >
                     Mark all as read
                   </button>
                 )}
-                <button onClick={() => setShowNotifications(false)} style={styles.closeBtn}>✕</button>
+
+                <button
+                  onClick={() => setShowNotifications(false)}
+                  style={styles.closeBtn}
+                >
+                  ✕
+                </button>
               </div>
             </div>
 
             {notifications.length === 0 ? (
-              <p style={styles.emptyText}>No notifications yet.</p>
+              <p style={styles.emptyText}>
+                No notifications yet.
+              </p>
             ) : (
               <div style={styles.notificationList}>
                 {notifications.map((notif) => (
@@ -154,14 +285,23 @@ function Navbar() {
                     key={notif._id}
                     style={{
                       ...styles.notificationItem,
-                      backgroundColor: notif.isRead ? "#fff" : "#e3f2fd",
+                      backgroundColor: notif.isRead
+                        ? "#fff"
+                        : "#e3f2fd",
                     }}
                   >
                     <div style={styles.notifContent}>
                       <strong>{notif.title}</strong>
+
                       <p>{notif.message}</p>
-                      <small>{new Date(notif.createdAt).toLocaleString()}</small>
+
+                      <small>
+                        {new Date(
+                          notif.createdAt
+                        ).toLocaleString()}
+                      </small>
                     </div>
+
                     {notif.isRead === false && (
                       <button
                         onClick={() => markAsRead(notif._id)}
@@ -194,17 +334,20 @@ const styles = {
     zIndex: 1000,
     boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
   },
+
   navLeft: {
     display: "flex",
     alignItems: "center",
     gap: "15px",
   },
+
   brand: {
     color: "white",
     textDecoration: "none",
     fontSize: "20px",
     fontWeight: "bold",
   },
+
   roleBadge: {
     padding: "4px 12px",
     backgroundColor: "#3498db",
@@ -212,25 +355,13 @@ const styles = {
     fontSize: "12px",
     fontWeight: "bold",
   },
-  navLinks: {
-    display: "flex",
-    gap: "10px",
-    marginLeft: "10px",
-  },
-  navLink: {
-    background: "none",
-    border: "none",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-    padding: "4px 8px",
-    borderRadius: "4px",
-  },
+
   navRight: {
     display: "flex",
     alignItems: "center",
     gap: "15px",
   },
+
   notificationBtn: {
     position: "relative",
     background: "none",
@@ -239,6 +370,7 @@ const styles = {
     fontSize: "24px",
     cursor: "pointer",
   },
+
   badge: {
     position: "absolute",
     top: "-5px",
@@ -250,6 +382,7 @@ const styles = {
     fontSize: "12px",
     fontWeight: "bold",
   },
+
   logoutBtn: {
     padding: "8px 16px",
     backgroundColor: "#e74c3c",
@@ -260,6 +393,7 @@ const styles = {
     fontSize: "14px",
     fontWeight: "bold",
   },
+
   notificationOverlay: {
     position: "fixed",
     top: 0,
@@ -272,6 +406,7 @@ const styles = {
     alignItems: "center",
     zIndex: 2000,
   },
+
   notificationPanel: {
     backgroundColor: "white",
     padding: "20px",
@@ -282,6 +417,7 @@ const styles = {
     overflowY: "auto",
     boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
   },
+
   notificationHeader: {
     display: "flex",
     justifyContent: "space-between",
@@ -290,11 +426,13 @@ const styles = {
     borderBottom: "1px solid #eee",
     paddingBottom: "10px",
   },
+
   notificationActions: {
     display: "flex",
     gap: "10px",
     alignItems: "center",
   },
+
   markAllBtn: {
     padding: "4px 12px",
     backgroundColor: "#3498db",
@@ -304,6 +442,7 @@ const styles = {
     cursor: "pointer",
     fontSize: "12px",
   },
+
   closeBtn: {
     padding: "4px 8px",
     backgroundColor: "#e74c3c",
@@ -313,16 +452,19 @@ const styles = {
     cursor: "pointer",
     fontSize: "16px",
   },
+
   emptyText: {
     textAlign: "center",
     padding: "30px 0",
     color: "#888",
   },
+
   notificationList: {
     display: "flex",
     flexDirection: "column",
     gap: "10px",
   },
+
   notificationItem: {
     padding: "12px",
     borderRadius: "8px",
@@ -332,9 +474,11 @@ const styles = {
     alignItems: "center",
     gap: "10px",
   },
+
   notifContent: {
     flex: 1,
   },
+
   readBtn: {
     padding: "4px 10px",
     backgroundColor: "#27ae60",
@@ -347,3 +491,4 @@ const styles = {
 };
 
 export default Navbar;
+

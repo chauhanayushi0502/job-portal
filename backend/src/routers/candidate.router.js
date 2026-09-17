@@ -14,6 +14,6 @@ candidateRouter.get("/getCandidateNotifications",authentication,getCandidateNoti
 candidateRouter.get("/getcandidate", authentication, getCandidateProfile);
 candidateRouter.put("/updatecandidate", authentication, updateCandidateProfile);
 candidateRouter.get("/checkprofile", authentication, checkProfileComplete);
-candidateRouter.put("/markread/:notificationId",authentication,markAsRead)
-candidateRouter.put("/markallread",authentication, markAllAsRead);
+candidateRouter.put("/markAsRead/:notificationId",authentication,markAsRead)
+candidateRouter.put("/markAllAsRead",authentication, markAllAsRead);
 export default candidateRouter;

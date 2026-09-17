@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { getFetchUrl } from './util';
+import React, { useState, useEffect } from "react";
+import { getFetchUrl } from "./util";
 
 function Notifications({ onClose }) {
   const [notifications, setNotifications] = useState([]);
@@ -10,10 +10,13 @@ function Notifications({ onClose }) {
   }, []);
 
   const fetchNotifications = async () => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(getFetchUrl("api/notification/getnotifications"), {
-      headers: { 'token': token }
-    });
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      getFetchUrl("api/notification/getnotifications"),
+      {
+        headers: { token: token },
+      },
+    );
     const data = await response.json();
     if (data.success) {
       setNotifications(data.notifications || []);
@@ -23,6 +26,7 @@ function Notifications({ onClose }) {
 
   // const markAsRead = async (id) => {
   //   const token = localStorage.getItem('token');
+  //   console.log(token);
   //   await fetch(getFetchUrl(`api/company/markread/${id}`), {
   //     method: 'PUT',
   //     headers: { 'token': token }
@@ -31,15 +35,29 @@ function Notifications({ onClose }) {
   // };
 
   const markAsRead = async (id) => {
-    const token = localStorage.getItem('token');
-    
-    // Change `${id}` to match the parameter name your route expects (`notificationId`)
+    const token = localStorage.getItem("token");
+    console.log(token);
     await fetch(getFetchUrl(`api/notification/markread/${id}`), {
-      method: 'PUT',
-      headers: { 'token': token }
+      method: "PUT",
+      headers: { token: token },
     });
-    
     fetchNotifications();
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        getFetchUrl("api/notification/markallread"),
+        { method: "PUT", headers: { token: token } },
+      );
+      const data = await response.json();
+      if (data.success) {
+        fetchNotifications();
+      }
+    } catch (error) {
+      console.log("Error marking all notifications as read:", error);
+    }
   };
 
   return (
@@ -47,7 +65,9 @@ function Notifications({ onClose }) {
       <div style={styles.modal}>
         <div style={styles.modalHeader}>
           <h2>Notifications</h2>
-          <button onClick={onClose} style={styles.closeBtn}>close</button>
+          <button onClick={onClose} style={styles.closeBtn}>
+            close
+          </button>
         </div>
 
         {loading ? (
@@ -64,7 +84,10 @@ function Notifications({ onClose }) {
                   <small>{new Date(notif.createdAt).toLocaleString()}</small>
                 </div>
                 {!notif.isRead && (
-                  <button onClick={() => markAsRead(notif._id)} style={styles.readBtn}>
+                  <button
+                    onClick={() => markAsRead(notif._id)}
+                    style={styles.readBtn}
+                  >
                     Mark as Read
                   </button>
                 )}
@@ -79,74 +102,77 @@ function Notifications({ onClose }) {
 
 const styles = {
   modalOverlay: {
-    position: 'fixed',
-    top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 1000,
   },
   modal: {
-    backgroundColor: 'white',
-    padding: '30px',
-    borderRadius: '12px',
-    width: '100%',
-    maxWidth: '500px',
-    maxHeight: '80vh',
-    overflowY: 'auto',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+    backgroundColor: "white",
+    padding: "30px",
+    borderRadius: "12px",
+    width: "100%",
+    maxWidth: "500px",
+    maxHeight: "80vh",
+    overflowY: "auto",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
   },
   modalHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
   },
   closeBtn: {
-    padding: '5px 10px',
-    backgroundColor: '#dc3545',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '16px',
+    padding: "5px 10px",
+    backgroundColor: "#dc3545",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "16px",
   },
   loading: {
-    textAlign: 'center',
-    padding: '20px',
-    color: '#666',
+    textAlign: "center",
+    padding: "20px",
+    color: "#666",
   },
   emptyText: {
-    textAlign: 'center',
-    padding: '30px',
-    color: '#888',
+    textAlign: "center",
+    padding: "30px",
+    color: "#888",
   },
   list: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
   },
   item: {
-    padding: '15px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '8px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: '10px',
+    padding: "15px",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "8px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "10px",
   },
   itemContent: {
     flex: 1,
   },
   readBtn: {
-    padding: '4px 12px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '12px',
+    padding: "4px 12px",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "12px",
   },
 };
 

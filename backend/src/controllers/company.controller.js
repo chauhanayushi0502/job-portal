@@ -226,6 +226,7 @@ export const markAsRead = async (req, res) => {
     });
   }
 };
+
 export const markAllAsRead = async (req, res) => {
   try {
     const userId = req.user._id;
